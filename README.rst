@@ -72,7 +72,7 @@ OCI Bastion について整理する
   cat <<EOF > config.oci.tfbackend
   bucket = "terraform-working"
   namespace = "テナンシに一意に付与されたネームスペース"
-  key = "oci-vcn-flow-logs/terraform.tfstate"
+  key = "oci-bastion-organize/terraform.tfstate"
   auth = "SecurityToken"
   config_file_profile = "ADMIN"
   region = "ap-tokyo-1"
