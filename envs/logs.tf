@@ -42,7 +42,7 @@ Logs
 ************************************************************/
 ##### VCN Flow Logs
 resource "oci_logging_log" "vcn_flow_logs" {
-  display_name = "logs-vcn-flow-logs-points-vcn"
+  display_name = "logs-vcn-flow-logs-points-subnet"
   is_enabled   = true
   log_type     = "SERVICE"
   configuration {
