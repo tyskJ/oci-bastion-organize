@@ -9,7 +9,7 @@ resource "oci_core_vcn" "vcn" {
   # 文字から始めること
   # ハイフンとアンダースコアは使用不可
   # 後から変更不可
-  dns_label      = "vcn"
+  dns_label = "vcn"
   defined_tags = {
     format("%s.%s", oci_identity_tag_namespace.common.name, oci_identity_tag_default.key_env.tag_definition_name)                = "prd"
     format("%s.%s", oci_identity_tag_namespace.common.name, oci_identity_tag_default.key_managedbyterraform.tag_definition_name) = "true"
@@ -34,16 +34,16 @@ Subnet
 ************************************************************/
 ### For Bastion
 resource "oci_core_subnet" "private_bastion" {
-  compartment_id             = oci_identity_compartment.workload.id
-  vcn_id                     = oci_core_vcn.vcn.id
-  cidr_block                 = "10.0.1.0/24"
-  display_name               = "private-bastion"
+  compartment_id = oci_identity_compartment.workload.id
+  vcn_id         = oci_core_vcn.vcn.id
+  cidr_block     = "10.0.1.0/24"
+  display_name   = "private-bastion"
   # 最大15文字の英数字
   # 文字から始めること
   # ハイフンとアンダースコアは使用不可
   # 後から変更不可
-  dns_label                  = "bastionnw"
-  security_list_ids          = [oci_core_security_list.sl.id]
+  dns_label         = "bastionnw"
+  security_list_ids = [oci_core_security_list.sl.id]
   # prohibit_internet_ingress と prohibit_public_ip_on_vnic は 同様の動き
   # そのため、２つのパラメータの true/false を互い違いにするとconflictでエラーとなる
   # 基本的には、値を揃えるか、どちらか一方を明記すること
@@ -57,16 +57,16 @@ resource "oci_core_subnet" "private_bastion" {
 
 ### For Oracle Linux
 resource "oci_core_subnet" "private_oracle" {
-  compartment_id             = oci_identity_compartment.workload.id
-  vcn_id                     = oci_core_vcn.vcn.id
-  cidr_block                 = "10.0.2.0/24"
-  display_name               = "private-oracle"
+  compartment_id = oci_identity_compartment.workload.id
+  vcn_id         = oci_core_vcn.vcn.id
+  cidr_block     = "10.0.2.0/24"
+  display_name   = "private-oracle"
   # 最大15文字の英数字
   # 文字から始めること
   # ハイフンとアンダースコアは使用不可
   # 後から変更不可
-  dns_label                  = "oraclenw"
-  security_list_ids          = [oci_core_security_list.sl.id]
+  dns_label         = "oraclenw"
+  security_list_ids = [oci_core_security_list.sl.id]
   # prohibit_internet_ingress と prohibit_public_ip_on_vnic は 同様の動き
   # そのため、２つのパラメータの true/false を互い違いにするとconflictでエラーとなる
   # 基本的には、値を揃えるか、どちらか一方を明記すること
@@ -80,16 +80,16 @@ resource "oci_core_subnet" "private_oracle" {
 
 ### For Windows Server
 resource "oci_core_subnet" "private_windows" {
-  compartment_id             = oci_identity_compartment.workload.id
-  vcn_id                     = oci_core_vcn.vcn.id
-  cidr_block                 = "10.0.3.0/24"
-  display_name               = "private-windows"
+  compartment_id = oci_identity_compartment.workload.id
+  vcn_id         = oci_core_vcn.vcn.id
+  cidr_block     = "10.0.3.0/24"
+  display_name   = "private-windows"
   # 最大15文字の英数字
   # 文字から始めること
   # ハイフンとアンダースコアは使用不可
   # 後から変更不可
-  dns_label                  = "windowsnw"
-  security_list_ids          = [oci_core_security_list.sl.id]
+  dns_label         = "windowsnw"
+  security_list_ids = [oci_core_security_list.sl.id]
   # prohibit_internet_ingress と prohibit_public_ip_on_vnic は 同様の動き
   # そのため、２つのパラメータの true/false を互い違いにするとconflictでエラーとなる
   # 基本的には、値を揃えるか、どちらか一方を明記すること
@@ -122,11 +122,11 @@ resource "oci_core_route_table" "rtb_bastion" {
   compartment_id = oci_identity_compartment.workload.id
   vcn_id         = oci_core_vcn.vcn.id
   display_name   = "rtb-bastion"
-#   route_rules {
-#     network_entity_id = oci_core_internet_gateway.igw.id
-#     destination       = "0.0.0.0/0"
-#     destination_type  = "CIDR_BLOCK"
-#   }
+  #   route_rules {
+  #     network_entity_id = oci_core_internet_gateway.igw.id
+  #     destination       = "0.0.0.0/0"
+  #     destination_type  = "CIDR_BLOCK"
+  #   }
   defined_tags = {
     format("%s.%s", oci_identity_tag_namespace.common.name, oci_identity_tag_default.key_env.tag_definition_name)                = "prd"
     format("%s.%s", oci_identity_tag_namespace.common.name, oci_identity_tag_default.key_managedbyterraform.tag_definition_name) = "true"
@@ -143,11 +143,11 @@ resource "oci_core_route_table" "rtb_oracle" {
   compartment_id = oci_identity_compartment.workload.id
   vcn_id         = oci_core_vcn.vcn.id
   display_name   = "rtb-oracle"
-#   route_rules {
-#     network_entity_id = oci_core_internet_gateway.igw.id
-#     destination       = "0.0.0.0/0"
-#     destination_type  = "CIDR_BLOCK"
-#   }
+  #   route_rules {
+  #     network_entity_id = oci_core_internet_gateway.igw.id
+  #     destination       = "0.0.0.0/0"
+  #     destination_type  = "CIDR_BLOCK"
+  #   }
   defined_tags = {
     format("%s.%s", oci_identity_tag_namespace.common.name, oci_identity_tag_default.key_env.tag_definition_name)                = "prd"
     format("%s.%s", oci_identity_tag_namespace.common.name, oci_identity_tag_default.key_managedbyterraform.tag_definition_name) = "true"
@@ -164,11 +164,11 @@ resource "oci_core_route_table" "rtb_windows" {
   compartment_id = oci_identity_compartment.workload.id
   vcn_id         = oci_core_vcn.vcn.id
   display_name   = "rtb-windows"
-#   route_rules {
-#     network_entity_id = oci_core_internet_gateway.igw.id
-#     destination       = "0.0.0.0/0"
-#     destination_type  = "CIDR_BLOCK"
-#   }
+  #   route_rules {
+  #     network_entity_id = oci_core_internet_gateway.igw.id
+  #     destination       = "0.0.0.0/0"
+  #     destination_type  = "CIDR_BLOCK"
+  #   }
   defined_tags = {
     format("%s.%s", oci_identity_tag_namespace.common.name, oci_identity_tag_default.key_env.tag_definition_name)                = "prd"
     format("%s.%s", oci_identity_tag_namespace.common.name, oci_identity_tag_default.key_managedbyterraform.tag_definition_name) = "true"
