@@ -48,7 +48,7 @@ resource "oci_identity_tag_default" "key_system" {
   tag_definition_id = oci_identity_tag.key_system.id
   value             = "oci-bastion-organize"
   # TagがENUMでなく、値を固定しているためfalse
-  # リソース作成時に自動的に設定される
+  # リソース作成時に自動的に設定されるためfalse
   is_required       = false
 }
 
