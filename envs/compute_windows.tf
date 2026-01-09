@@ -82,9 +82,9 @@ resource "oci_core_instance" "windows_instance" {
   }
   create_vnic_details {
     display_name = "windows-instance-vnic"
-    subnet_id    = oci_core_subnet.public.id
+    subnet_id    = oci_core_subnet.private_windows.id
     nsg_ids = [
-      oci_core_network_security_group.sg.id
+      oci_core_network_security_group.sg_windows.id
     ]
     assign_public_ip = true
     # 最大63文字 (Windowsは15文字)
