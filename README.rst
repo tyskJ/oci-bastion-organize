@@ -153,6 +153,7 @@ OCI Bastion について整理する
 * `Backend block configuration overview <https://developer.hashicorp.com/terraform/language/backend#partial-configuration>`_
 * `All Image Families - Oracle Cloud Infrastructure Documentation/Images <https://docs.oracle.com/en-us/iaas/images/>`_
 * `タグおよびタグ・ネームスペースの概念 - Oracle Cloud Infrastructureドキュメント <https://docs.oracle.com/ja-jp/iaas/Content/Tagging/Tasks/managingtagsandtagnamespaces.htm#Who>`_
+* `About the DNS Domains and Hostnames - Oracle Cloud Infrastructure Documentation <https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/dns.htm#About>`_
 
 ブログ
 ---------------------------------------------------------------------
