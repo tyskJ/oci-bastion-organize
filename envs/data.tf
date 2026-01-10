@@ -8,6 +8,8 @@ data "oci_identity_fault_domains" "fds" {
   availability_domain = data.oci_identity_availability_domain.ads.name
 }
 
+data "oci_core_services" "this" {}
+
 # 商用環境では使用するイメージのOCIDはハードコードすること（時間の経過とともに変化するため）
 data "oci_core_images" "oracle_supported_image" {
   compartment_id           = oci_identity_compartment.workload.id
