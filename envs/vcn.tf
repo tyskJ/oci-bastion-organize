@@ -211,8 +211,5 @@ resource "oci_core_network_security_group" "sg_windows" {
   compartment_id = oci_identity_compartment.workload.id
   vcn_id         = oci_core_vcn.vcn.id
   display_name   = "sg-windows"
-  defined_tags = {
-    format("%s.%s", oci_identity_tag_namespace.common.name, oci_identity_tag_default.key_env.tag_definition_name)                = "prd"
-    format("%s.%s", oci_identity_tag_namespace.common.name, oci_identity_tag_default.key_managedbyterraform.tag_definition_name) = "true"
-  }
+  defined_tags   = local.common_defined_tags
 }
