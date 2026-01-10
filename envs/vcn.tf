@@ -122,11 +122,11 @@ resource "oci_core_route_table" "rtb_bastion" {
   compartment_id = oci_identity_compartment.workload.id
   vcn_id         = oci_core_vcn.vcn.id
   display_name   = "rtb-bastion"
-  route_rules {
-    network_entity_id = oci_core_service_gateway.service_gateway.id
-    destination       = data.oci_core_services.this.services[1].cidr_block
-    destination_type  = "SERVICE_CIDR_BLOCK"
-  }
+  #   route_rules {
+  #     network_entity_id = oci_core_internet_gateway.igw.id
+  #     destination       = "0.0.0.0/0"
+  #     destination_type  = "CIDR_BLOCK"
+  #   }
   defined_tags = local.common_defined_tags
 }
 
@@ -140,11 +140,11 @@ resource "oci_core_route_table" "rtb_oracle" {
   compartment_id = oci_identity_compartment.workload.id
   vcn_id         = oci_core_vcn.vcn.id
   display_name   = "rtb-oracle"
-  #   route_rules {
-  #     network_entity_id = oci_core_internet_gateway.igw.id
-  #     destination       = "0.0.0.0/0"
-  #     destination_type  = "CIDR_BLOCK"
-  #   }
+  route_rules {
+    network_entity_id = oci_core_service_gateway.service_gateway.id
+    destination       = data.oci_core_services.this.services[1].cidr_block
+    destination_type  = "SERVICE_CIDR_BLOCK"
+  }
   defined_tags = local.common_defined_tags
 }
 
