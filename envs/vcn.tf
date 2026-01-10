@@ -182,11 +182,11 @@ resource "oci_core_network_security_group" "sg_oracle" {
   defined_tags   = local.common_defined_tags
 }
 
-# resource "oci_core_network_security_group_security_rule" "sg_rule_1" {
-#   network_security_group_id = oci_core_network_security_group.sg.id
+# resource "oci_core_network_security_group_security_rule" "sg_oracle_ingress_ssh" {
+#   network_security_group_id = oci_core_network_security_group.sg_oracle.id
 #   protocol                  = "6"
 #   direction                 = "INGRESS"
-#   source                    = var.source_ip
+#   source                    = "10.0.1.0/24"
 #   stateless                 = false
 #   source_type               = "CIDR_BLOCK"
 #   tcp_options {
@@ -197,11 +197,34 @@ resource "oci_core_network_security_group" "sg_oracle" {
 #   }
 # }
 
-# resource "oci_core_network_security_group_security_rule" "sg_rule_2" {
-#   network_security_group_id = oci_core_network_security_group.sg.id
+resource "oci_core_network_security_group_security_rule" "sg_oracle_egress_service_gateway" {
+  network_security_group_id = oci_core_network_security_group.sg_oracle.id
+  protocol                  = "6"
+  direction                 = "EGRESS"
+  destination               = data.oci_core_services.this.services[1].cidr_block
+  stateless                 = false
+  destination_type          = "SERVICE_CIDR_BLOCK"
+  tcp_options {
+    destination_port_range {
+      min = 443
+      max = 443
+    }
+  }
+}
+
+### For Windows Server
+resource "oci_core_network_security_group" "sg_windows" {
+  compartment_id = oci_identity_compartment.workload.id
+  vcn_id         = oci_core_vcn.vcn.id
+  display_name   = "sg-windows"
+  defined_tags   = local.common_defined_tags
+}
+
+# resource "oci_core_network_security_group_security_rule" "sg_windows_ingress_rdp" {
+#   network_security_group_id = oci_core_network_security_group.sg_windows.id
 #   protocol                  = "6"
 #   direction                 = "INGRESS"
-#   source                    = var.source_ip
+#   source                    = "10.0.1.0/24"
 #   stateless                 = false
 #   source_type               = "CIDR_BLOCK"
 #   tcp_options {
@@ -211,20 +234,3 @@ resource "oci_core_network_security_group" "sg_oracle" {
 #     }
 #   }
 # }
-
-# resource "oci_core_network_security_group_security_rule" "sg_rule_3" {
-#   network_security_group_id = oci_core_network_security_group.sg.id
-#   protocol                  = "all"
-#   direction                 = "EGRESS"
-#   destination               = "0.0.0.0/0"
-#   stateless                 = false
-#   destination_type          = "CIDR_BLOCK"
-# }
-
-### For Windows Server
-resource "oci_core_network_security_group" "sg_windows" {
-  compartment_id = oci_identity_compartment.workload.id
-  vcn_id         = oci_core_vcn.vcn.id
-  display_name   = "sg-windows"
-  defined_tags   = local.common_defined_tags
-}
