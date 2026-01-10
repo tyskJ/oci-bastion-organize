@@ -112,7 +112,7 @@ resource "oci_core_instance" "oracle_instance" {
     # 数字のみになることは不可
     # RFC952 及び RFC1123 に準拠する必要有
     # 後から変更可
-    hostname_label   = "oracle-instance"
+    hostname_label = "oracle-instance"
   }
   is_pv_encryption_in_transit_enabled = true
   source_details {
@@ -127,8 +127,5 @@ resource "oci_core_instance" "oracle_instance" {
     ssh_authorized_keys = tls_private_key.ssh_keygen.public_key_openssh
     user_data           = base64encode(file("./userdata/oracle_init.sh"))
   }
-  defined_tags = {
-    format("%s.%s", oci_identity_tag_namespace.common.name, oci_identity_tag_default.key_env.tag_definition_name)                = "prd"
-    format("%s.%s", oci_identity_tag_namespace.common.name, oci_identity_tag_default.key_managedbyterraform.tag_definition_name) = "true"
-  }
+  defined_tags = local.common_defined_tags
 }

@@ -9,11 +9,8 @@ resource "oci_core_vcn" "vcn" {
   # 文字から始めること
   # ハイフンとアンダースコアは使用不可
   # 後から変更不可
-  dns_label = "vcn"
-  defined_tags = {
-    format("%s.%s", oci_identity_tag_namespace.common.name, oci_identity_tag_default.key_env.tag_definition_name)                = "prd"
-    format("%s.%s", oci_identity_tag_namespace.common.name, oci_identity_tag_default.key_managedbyterraform.tag_definition_name) = "true"
-  }
+  dns_label    = "vcn"
+  defined_tags = local.common_defined_tags
 }
 
 /************************************************************
@@ -23,10 +20,7 @@ resource "oci_core_security_list" "sl" {
   compartment_id = oci_identity_compartment.workload.id
   vcn_id         = oci_core_vcn.vcn.id
   display_name   = "nothing-security-list"
-  defined_tags = {
-    format("%s.%s", oci_identity_tag_namespace.common.name, oci_identity_tag_default.key_env.tag_definition_name)                = "prd"
-    format("%s.%s", oci_identity_tag_namespace.common.name, oci_identity_tag_default.key_managedbyterraform.tag_definition_name) = "true"
-  }
+  defined_tags   = local.common_defined_tags
 }
 
 /************************************************************
@@ -49,10 +43,7 @@ resource "oci_core_subnet" "private_bastion" {
   # 基本的には、値を揃えるか、どちらか一方を明記すること
   prohibit_internet_ingress  = true
   prohibit_public_ip_on_vnic = true
-  defined_tags = {
-    format("%s.%s", oci_identity_tag_namespace.common.name, oci_identity_tag_default.key_env.tag_definition_name)                = "prd"
-    format("%s.%s", oci_identity_tag_namespace.common.name, oci_identity_tag_default.key_managedbyterraform.tag_definition_name) = "true"
-  }
+  defined_tags               = local.common_defined_tags
 }
 
 ### For Oracle Linux
@@ -72,10 +63,7 @@ resource "oci_core_subnet" "private_oracle" {
   # 基本的には、値を揃えるか、どちらか一方を明記すること
   prohibit_internet_ingress  = true
   prohibit_public_ip_on_vnic = true
-  defined_tags = {
-    format("%s.%s", oci_identity_tag_namespace.common.name, oci_identity_tag_default.key_env.tag_definition_name)                = "prd"
-    format("%s.%s", oci_identity_tag_namespace.common.name, oci_identity_tag_default.key_managedbyterraform.tag_definition_name) = "true"
-  }
+  defined_tags               = local.common_defined_tags
 }
 
 ### For Windows Server
@@ -95,10 +83,7 @@ resource "oci_core_subnet" "private_windows" {
   # 基本的には、値を揃えるか、どちらか一方を明記すること
   prohibit_internet_ingress  = true
   prohibit_public_ip_on_vnic = true
-  defined_tags = {
-    format("%s.%s", oci_identity_tag_namespace.common.name, oci_identity_tag_default.key_env.tag_definition_name)                = "prd"
-    format("%s.%s", oci_identity_tag_namespace.common.name, oci_identity_tag_default.key_managedbyterraform.tag_definition_name) = "true"
-  }
+  defined_tags               = local.common_defined_tags
 }
 
 # /************************************************************
@@ -127,10 +112,7 @@ resource "oci_core_route_table" "rtb_bastion" {
   #     destination       = "0.0.0.0/0"
   #     destination_type  = "CIDR_BLOCK"
   #   }
-  defined_tags = {
-    format("%s.%s", oci_identity_tag_namespace.common.name, oci_identity_tag_default.key_env.tag_definition_name)                = "prd"
-    format("%s.%s", oci_identity_tag_namespace.common.name, oci_identity_tag_default.key_managedbyterraform.tag_definition_name) = "true"
-  }
+  defined_tags = local.common_defined_tags
 }
 
 resource "oci_core_route_table_attachment" "attachment_bastion" {
@@ -148,10 +130,7 @@ resource "oci_core_route_table" "rtb_oracle" {
   #     destination       = "0.0.0.0/0"
   #     destination_type  = "CIDR_BLOCK"
   #   }
-  defined_tags = {
-    format("%s.%s", oci_identity_tag_namespace.common.name, oci_identity_tag_default.key_env.tag_definition_name)                = "prd"
-    format("%s.%s", oci_identity_tag_namespace.common.name, oci_identity_tag_default.key_managedbyterraform.tag_definition_name) = "true"
-  }
+  defined_tags = local.common_defined_tags
 }
 
 resource "oci_core_route_table_attachment" "attachment_oracle" {
@@ -169,10 +148,7 @@ resource "oci_core_route_table" "rtb_windows" {
   #     destination       = "0.0.0.0/0"
   #     destination_type  = "CIDR_BLOCK"
   #   }
-  defined_tags = {
-    format("%s.%s", oci_identity_tag_namespace.common.name, oci_identity_tag_default.key_env.tag_definition_name)                = "prd"
-    format("%s.%s", oci_identity_tag_namespace.common.name, oci_identity_tag_default.key_managedbyterraform.tag_definition_name) = "true"
-  }
+  defined_tags = local.common_defined_tags
 }
 
 resource "oci_core_route_table_attachment" "attachment_windows" {
@@ -188,10 +164,7 @@ resource "oci_core_network_security_group" "sg_oracle" {
   compartment_id = oci_identity_compartment.workload.id
   vcn_id         = oci_core_vcn.vcn.id
   display_name   = "sg-oracle"
-  defined_tags = {
-    format("%s.%s", oci_identity_tag_namespace.common.name, oci_identity_tag_default.key_env.tag_definition_name)                = "prd"
-    format("%s.%s", oci_identity_tag_namespace.common.name, oci_identity_tag_default.key_managedbyterraform.tag_definition_name) = "true"
-  }
+  defined_tags   = local.common_defined_tags
 }
 
 # resource "oci_core_network_security_group_security_rule" "sg_rule_1" {

@@ -94,12 +94,12 @@ resource "oci_core_instance" "windows_instance" {
     # 数字のみになることは不可
     # RFC952 及び RFC1123 に準拠する必要有
     # 後から変更可
-    hostname_label   = "windows-instance"
+    hostname_label = "windows-instance"
   }
   is_pv_encryption_in_transit_enabled = true
   source_details {
-    source_type                     = "image"
-    source_id                       = data.oci_core_images.windows_supported_image.images[0].id
+    source_type = "image"
+    source_id   = data.oci_core_images.windows_supported_image.images[0].id
     # boot_volume_size_in_gbs         = "100"
     boot_volume_vpus_per_gb         = "10"
     is_preserve_boot_volume_enabled = false
@@ -108,8 +108,5 @@ resource "oci_core_instance" "windows_instance" {
   metadata = {
     user_data = data.cloudinit_config.this.rendered
   }
-  defined_tags = {
-    format("%s.%s", oci_identity_tag_namespace.common.name, oci_identity_tag_default.key_env.tag_definition_name)                = "prd"
-    format("%s.%s", oci_identity_tag_namespace.common.name, oci_identity_tag_default.key_managedbyterraform.tag_definition_name) = "true"
-  }
+  defined_tags = local.common_defined_tags
 }
