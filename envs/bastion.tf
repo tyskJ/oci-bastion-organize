@@ -1,4 +1,18 @@
 # /************************************************************
+# Private Key
+# ************************************************************/
+resource "tls_private_key" "ssh_keygen" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+resource "local_sensitive_file" "private_key" {
+  filename        = "./.key/private.pem"
+  content         = tls_private_key.ssh_keygen.private_key_pem
+  file_permission = "0600"
+}
+
+# /************************************************************
 # Bastion
 # ************************************************************/
 resource "oci_bastion_bastion" "this" {
