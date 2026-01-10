@@ -16,10 +16,27 @@ resource "oci_core_vcn" "vcn" {
 /************************************************************
 Security List
 ************************************************************/
+##### For Bastion
 resource "oci_core_security_list" "sl_bastion" {
   compartment_id = oci_identity_compartment.workload.id
   vcn_id         = oci_core_vcn.vcn.id
   display_name   = "sl-bastion"
+  defined_tags   = local.common_defined_tags
+}
+
+##### For Oracle
+resource "oci_core_security_list" "sl_oracle" {
+  compartment_id = oci_identity_compartment.workload.id
+  vcn_id         = oci_core_vcn.vcn.id
+  display_name   = "sl-oracle"
+  defined_tags   = local.common_defined_tags
+}
+
+##### For Windows
+resource "oci_core_security_list" "sl_windows" {
+  compartment_id = oci_identity_compartment.workload.id
+  vcn_id         = oci_core_vcn.vcn.id
+  display_name   = "sl-windows"
   defined_tags   = local.common_defined_tags
 }
 
@@ -57,7 +74,7 @@ resource "oci_core_subnet" "private_oracle" {
   # ハイフンとアンダースコアは使用不可
   # 後から変更不可
   dns_label         = "oraclenw"
-  security_list_ids = [oci_core_security_list.sl_bastion.id]
+  security_list_ids = [oci_core_security_list.sl_oracle.id]
   # prohibit_internet_ingress と prohibit_public_ip_on_vnic は 同様の動き
   # そのため、２つのパラメータの true/false を互い違いにするとconflictでエラーとなる
   # 基本的には、値を揃えるか、どちらか一方を明記すること
@@ -77,7 +94,7 @@ resource "oci_core_subnet" "private_windows" {
   # ハイフンとアンダースコアは使用不可
   # 後から変更不可
   dns_label         = "windowsnw"
-  security_list_ids = [oci_core_security_list.sl_bastion.id]
+  security_list_ids = [oci_core_security_list.sl_windows.id]
   # prohibit_internet_ingress と prohibit_public_ip_on_vnic は 同様の動き
   # そのため、２つのパラメータの true/false を互い違いにするとconflictでエラーとなる
   # 基本的には、値を揃えるか、どちらか一方を明記すること
