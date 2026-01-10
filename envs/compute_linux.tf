@@ -44,6 +44,10 @@ resource "oci_core_instance" "oracle_instance" {
       name          = "Block Volume Management"
     }
     plugins_config {
+      desired_state = "ENABLED"
+      name          = "Bastion"
+    }
+    plugins_config {
       desired_state = "DISABLED"
       name          = "WebLogic Management Service"
     }
@@ -79,10 +83,6 @@ resource "oci_core_instance" "oracle_instance" {
       desired_state = "DISABLED"
       name          = "Compute HPC RDMA Authentication"
     }
-    plugins_config {
-      desired_state = "DISABLED"
-      name          = "Bastion"
-    }
   }
   create_vnic_details {
     display_name = "oracle-instance-vnic"
@@ -111,7 +111,7 @@ resource "oci_core_instance" "oracle_instance" {
   }
   metadata = {
     # ssh_authorized_keys = tls_private_key.ssh_keygen.public_key_openssh
-    user_data           = base64encode(file("./userdata/oracle_init.sh"))
+    user_data = base64encode(file("./userdata/oracle_init.sh"))
   }
   defined_tags = local.common_defined_tags
 }
