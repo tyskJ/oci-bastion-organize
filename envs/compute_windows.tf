@@ -33,8 +33,8 @@ resource "oci_core_instance" "windows_instance" {
   fault_domain        = data.oci_identity_fault_domains.fds.fault_domains[0].name
   shape               = "VM.Standard.E5.Flex"
   shape_config {
-    ocpus         = 8
-    memory_in_gbs = 12
+    ocpus         = 2
+    memory_in_gbs = 10
   }
   instance_options {
     are_legacy_imds_endpoints_disabled = false
