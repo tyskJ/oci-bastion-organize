@@ -7,7 +7,7 @@ resource "tls_private_key" "ssh_keygen" {
 }
 
 resource "local_sensitive_file" "private_key" {
-  filename        = "./.key/private.pem"
+  filename        = "./.key/private_bastion.pem"
   content         = tls_private_key.ssh_keygen.private_key_pem
   file_permission = "0600"
 }
@@ -16,7 +16,7 @@ resource "local_sensitive_file" "private_key" {
 # Public Key
 # ************************************************************/
 resource "local_sensitive_file" "public_key" {
-  filename        = "./.key/public.pub"
+  filename        = "./.key/public_bastion.pub"
   content         = tls_private_key.ssh_keygen.public_key_openssh
   file_permission = "0600"
 }
@@ -46,6 +46,7 @@ data "oci_core_instance" "oracle" {
 resource "oci_bastion_session" "managed_ssh" {
   # ターゲットリソースがRUNNINGでないと作成不可のためcountで制御
   # 作成のタイミングで、Private Endpointからのインバウンドルールは不要
+  # 加えて、ターゲットリソースにてBastion pluginがRUNNINGでないと作成不可（この点は考慮できていない）
   count = contains(["PROVISIONING", "STARTING", "RUNNING"], data.oci_core_instance.oracle.state) ? 1 : 0
 
   display_name = "managed-ssh-session-to-oracle"
