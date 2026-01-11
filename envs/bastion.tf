@@ -13,6 +13,15 @@ resource "local_sensitive_file" "private_key" {
 }
 
 # /************************************************************
+# Public Key
+# ************************************************************/
+resource "local_sensitive_file" "public_key" {
+  filename        = "./.key/public.pub"
+  content         = tls_private_key.ssh_keygen.public_key_openssh
+  file_permission = "0600"
+}
+
+# /************************************************************
 # Bastion
 # ************************************************************/
 resource "oci_bastion_bastion" "this" {
