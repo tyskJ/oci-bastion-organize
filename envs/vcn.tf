@@ -22,6 +22,17 @@ resource "oci_core_security_list" "sl_bastion" {
   vcn_id         = oci_core_vcn.vcn.id
   display_name   = "sl-bastion"
   defined_tags   = local.common_defined_tags
+  egress_security_rules {
+    protocol         = "6"
+    description      = "Connect to SSH"
+    destination      = "10.0.2.0/24"
+    stateless        = false
+    destination_type = "CIDR_BLOCK"
+    tcp_options {
+      min = 22
+      max = 22
+    }
+  }
 }
 
 ##### For Oracle
@@ -199,20 +210,20 @@ resource "oci_core_network_security_group" "sg_oracle" {
   defined_tags   = local.common_defined_tags
 }
 
-# resource "oci_core_network_security_group_security_rule" "sg_oracle_ingress_ssh" {
-#   network_security_group_id = oci_core_network_security_group.sg_oracle.id
-#   protocol                  = "6"
-#   direction                 = "INGRESS"
-#   source                    = "10.0.1.0/24"
-#   stateless                 = false
-#   source_type               = "CIDR_BLOCK"
-#   tcp_options {
-#     destination_port_range {
-#       min = 22
-#       max = 22
-#     }
-#   }
-# }
+resource "oci_core_network_security_group_security_rule" "sg_oracle_ingress_ssh" {
+  network_security_group_id = oci_core_network_security_group.sg_oracle.id
+  protocol                  = "6"
+  direction                 = "INGRESS"
+  source                    = "10.0.1.0/24"
+  stateless                 = false
+  source_type               = "CIDR_BLOCK"
+  tcp_options {
+    destination_port_range {
+      min = 22
+      max = 22
+    }
+  }
+}
 
 resource "oci_core_network_security_group_security_rule" "sg_oracle_egress_service_gateway" {
   network_security_group_id = oci_core_network_security_group.sg_oracle.id
