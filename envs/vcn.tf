@@ -22,6 +22,9 @@ resource "oci_core_security_list" "sl_bastion" {
   vcn_id         = oci_core_vcn.vcn.id
   display_name   = "sl-bastion"
   defined_tags   = local.common_defined_tags
+  # セッションを張る際は、Bastion Private Endpoint が送信元となる
+  # Bastion Private Endpoint がターゲットリソースと同一サブネットでも、許可する必要がある点注意
+  # Bastion Private Endpoint は NSG で制御できないので、SL での制御が必要
   egress_security_rules {
     protocol         = "6"
     description      = "Connect to SSH"
