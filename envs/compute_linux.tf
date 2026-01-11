@@ -90,7 +90,7 @@ resource "oci_core_instance" "oracle_instance" {
     nsg_ids = [
       oci_core_network_security_group.sg_oracle.id
     ]
-    assign_public_ip = true
+    assign_public_ip = false
     # 最大63文字 (Windowsは15文字)
     # 英数字、ハイフンは使用可
     # ピリオドは使用不可
