@@ -38,6 +38,67 @@ resource "oci_bastion_bastion" "this" {
 # /************************************************************
 # Session
 # ************************************************************/
-##### Managed SSH 
+##### Managed SSH
+data "oci_core_instance" "oracle" {
+  instance_id = oci_core_instance.oracle_instance.id
+}
+
+resource "oci_bastion_session" "managed_ssh" {
+  # ターゲットリソースがRUNNINGでないと作成不可のためcountで制御
+  # 作成のタイミングで、Private Endpointからのインバウンドルールは不要
+  count = contains(["PROVISIONING", "STARTING", "RUNNING"], data.oci_core_instance.oracle.state) ? 1 : 0
+
+  display_name = "managed-ssh-session-to-oracle"
+  bastion_id   = oci_bastion_bastion.this.id
+  target_resource_details {
+    session_type                               = "MANAGED_SSH"
+    target_resource_id                         = oci_core_instance.oracle_instance.id
+    target_resource_operating_system_user_name = "opc"
+    target_resource_port                       = 22
+    target_resource_private_ip_address         = oci_core_instance.oracle_instance.private_ip
+  }
+  session_ttl_in_seconds = 10800 # minutes (Max)
+  key_type               = "PUB"
+  key_details {
+    public_key_content = tls_private_key.ssh_keygen.public_key_openssh
+  }
+}
+
 ##### SSH port forwarding
+data "oci_core_instance" "windows" {
+  instance_id = oci_core_instance.windows_instance.id
+}
+
+resource "oci_bastion_session" "ssh_port_forwarding" {
+  # ターゲットリソースがRUNNINGでないと作成不可のためcountで制御
+  # 作成のタイミングで、Private Endpointからのインバウンドルールは不要
+  count = contains(["PROVISIONING", "STARTING", "RUNNING"], data.oci_core_instance.windows.state) ? 1 : 0
+
+  display_name = "ssh-port-forwarding-session-to-windows"
+  bastion_id   = oci_bastion_bastion.this.id
+  target_resource_details {
+    session_type                       = "PORT_FORWARDING"
+    target_resource_id                 = oci_core_instance.windows_instance.id
+    target_resource_port               = 3389
+    target_resource_private_ip_address = oci_core_instance.windows_instance.private_ip
+  }
+  session_ttl_in_seconds = 10800 # minutes (Max)
+  key_type               = "PUB"
+  key_details {
+    public_key_content = tls_private_key.ssh_keygen.public_key_openssh
+  }
+}
+
 ##### Dynamic Port Forwarding (SOCKS5)
+resource "oci_bastion_session" "dynamic_port_forwarding" {
+  display_name = "dynamic-port-forwarding-session"
+  bastion_id   = oci_bastion_bastion.this.id
+  target_resource_details {
+    session_type = "DYNAMIC_PORT_FORWARDING"
+  }
+  session_ttl_in_seconds = 10800 # minutes (Max)
+  key_type               = "PUB"
+  key_details {
+    public_key_content = tls_private_key.ssh_keygen.public_key_openssh
+  }
+}
