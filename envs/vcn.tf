@@ -36,6 +36,17 @@ resource "oci_core_security_list" "sl_bastion" {
       max = 22
     }
   }
+  egress_security_rules {
+    protocol         = "6"
+    description      = "Connect to RDP"
+    destination      = "10.0.3.0/24"
+    stateless        = false
+    destination_type = "CIDR_BLOCK"
+    tcp_options {
+      min = 3389
+      max = 3389
+    }
+  }
 }
 
 ##### For Oracle
@@ -251,17 +262,17 @@ resource "oci_core_network_security_group" "sg_windows" {
   defined_tags   = local.common_defined_tags
 }
 
-# resource "oci_core_network_security_group_security_rule" "sg_windows_ingress_rdp" {
-#   network_security_group_id = oci_core_network_security_group.sg_windows.id
-#   protocol                  = "6"
-#   direction                 = "INGRESS"
-#   source                    = "10.0.1.0/24"
-#   stateless                 = false
-#   source_type               = "CIDR_BLOCK"
-#   tcp_options {
-#     destination_port_range {
-#       min = 3389
-#       max = 3389
-#     }
-#   }
-# }
+resource "oci_core_network_security_group_security_rule" "sg_windows_ingress_rdp" {
+  network_security_group_id = oci_core_network_security_group.sg_windows.id
+  protocol                  = "6"
+  direction                 = "INGRESS"
+  source                    = "10.0.1.0/24"
+  stateless                 = false
+  source_type               = "CIDR_BLOCK"
+  tcp_options {
+    destination_port_range {
+      min = 3389
+      max = 3389
+    }
+  }
+}
